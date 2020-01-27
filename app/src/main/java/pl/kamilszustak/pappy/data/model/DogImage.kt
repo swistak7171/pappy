@@ -7,10 +7,11 @@ import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "dog_images")
-@JsonClass(generateAdapter = true)
 @Parcelize
 data class DogImage(
     @ColumnInfo(name = "url")
-    @Json(name = "url")
-    var url: String = ""
+    var url: String = "",
+
+    @ColumnInfo(name = "breed")
+    var breed: String = ""
 ) : DatabaseEntity()
