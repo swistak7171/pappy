@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/dogImagesFragment">
+
+    <fragment
+        android:id="@+id/dogImagesFragment"
+        android:name="pl.kamilszustak.pappy.ui.main.images.DogImagesFragment"
+        android:label="DogImagesFragment"
+        tools:layout="@layout/fragment_dog_images" />
+</navigation>
