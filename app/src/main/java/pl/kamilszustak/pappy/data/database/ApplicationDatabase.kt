@@ -5,6 +5,7 @@ import androidx.room.*
 import pl.kamilszustak.pappy.data.database.converter.DateConverter
 import pl.kamilszustak.pappy.data.model.DogImage
 import pl.kamilszustak.pappy.R
+import pl.kamilszustak.pappy.data.database.dao.DogImageDao
 
 @Database(
     entities = [
@@ -15,6 +16,8 @@ import pl.kamilszustak.pappy.R
 )
 @TypeConverters(DateConverter::class)
 abstract class ApplicationDatabase : RoomDatabase() {
+
+    abstract fun getDogImageDao(): DogImageDao
 
     companion object {
         private var INSTANCE: ApplicationDatabase? = null
