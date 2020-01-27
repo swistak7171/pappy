@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">pappy</string>
+    <string name="database_name">pappy_database</string>
+</resources>

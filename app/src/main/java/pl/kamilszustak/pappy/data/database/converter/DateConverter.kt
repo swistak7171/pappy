@@ -1,0 +1,23 @@
+package pl.kamilszustak.pappy.data.database.converter
+
+import androidx.room.TypeConverter
+import java.text.SimpleDateFormat
+import java.util.*
+
+class DateConverter {
+
+    private val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? {
+        value?.let {
+            return Date(it)
+        }
+        return null
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
+    }
+}
