@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ModelAdapter
+import com.yuyakaido.android.cardstackview.CardStackLayoutManager
+import com.yuyakaido.android.cardstackview.CardStackListener
+import com.yuyakaido.android.cardstackview.Direction
+import com.yuyakaido.android.cardstackview.StackFrom
+import com.yuyakaido.android.cardstackview.SwipeableMethod
 import kotlinx.android.synthetic.main.fragment_dog_images.*
 import org.jetbrains.anko.design.snackbar
 import pl.kamilszustak.pappy.R
@@ -19,6 +25,7 @@ import pl.kamilszustak.pappy.data.model.DogImage
 import pl.kamilszustak.pappy.databinding.FragmentDogImagesBinding
 import pl.kamilszustak.pappy.ui.base.BaseFragment
 import pl.kamilszustak.pappy.util.updateModels
+import timber.log.Timber
 import javax.inject.Inject
 
 class DogImagesFragment : BaseFragment(R.layout.fragment_dog_images) {
@@ -53,22 +60,36 @@ class DogImagesFragment : BaseFragment(R.layout.fragment_dog_images) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeRecyclerView()
+        initializeCardStackView()
         setListeners()
         observeViewModel()
     }
 
-    private fun initializeRecyclerView() {
+    private fun initializeCardStackView() {
         modelAdapter = ModelAdapter {
             DogImageItem(it)
         }
-
         val fastAdapter = FastAdapter.with(modelAdapter)
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val listener = getCardStackListener()
 
-        dogImagesRecyclerView.apply {
+        val layoutManager = CardStackLayoutManager(context, listener).apply {
+            this.setStackFrom(StackFrom.TopAndRight)
+            this.setVisibleCount(3)
+            this.setTranslationInterval(8.0f)
+            this.setScaleInterval(0.95f)
+            this.setSwipeThreshold(0.3f)
+            this.setMaxDegree(40.0f)
+            this.setDirections(Direction.FREEDOM)
+            this.setCanScrollHorizontal(true)
+            this.setCanScrollVertical(true)
+            this.setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
+            this.setOverlayInterpolator(LinearInterpolator())
+        }
+
+        cardStackView.apply {
             this.layoutManager = layoutManager
             this.adapter = fastAdapter
+            this.itemAnimator = DefaultItemAnimator()
         }
     }
 
@@ -93,6 +114,45 @@ class DogImagesFragment : BaseFragment(R.layout.fragment_dog_images) {
 
         viewModel.error.observe(viewLifecycleOwner) { message ->
             view?.snackbar(message)
+        }
+    }
+
+    private fun getCardStackListener(): CardStackListener {
+        return object : CardStackListener {
+            override fun onCardSwiped(direction: Direction?) {
+                when (direction) {
+                    Direction.Left -> {
+                        Timber.i("Swiped left")
+                    }
+
+                    Direction.Right -> {
+                        Timber.i("Swiped right")
+                    }
+
+                    Direction.Top, Direction.Bottom -> {
+                        Timber.i("Swiped top/bottom")
+                    }
+
+                    else -> {
+                        Timber.i("Swiped somewhere else")
+                    }
+                }
+            }
+
+            override fun onCardDisappeared(view: View?, position: Int) {
+            }
+
+            override fun onCardDragging(direction: Direction?, ratio: Float) {
+            }
+
+            override fun onCardCanceled() {
+            }
+
+            override fun onCardAppeared(view: View?, position: Int) {
+            }
+
+            override fun onCardRewound() {
+            }
         }
     }
 }
