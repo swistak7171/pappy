@@ -23,7 +23,7 @@ class DogImagesViewModel @Inject constructor(
     val error: LiveData<String> = _error
 
     fun onSearchButtonClick() {
-        val breed = breedName.value?.toLowerCase()
+        val breed = breedName.value?.trim()?.toLowerCase()
         if (breed.isNullOrBlank()) {
             _error.value = "Breed name cannot be blank"
             return

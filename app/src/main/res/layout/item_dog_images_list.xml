@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
-    android:elevation="8dp">
+    app:cardCornerRadius="@dimen/default_radius"
+    app:cardElevation="@dimen/default_elevation"
+    android:layout_margin="@dimen/default_half_margin">
 
     <ImageView
         android:layout_width="wrap_content"
